@@ -1,0 +1,3 @@
+0 / 921600 pixels = 0.000000%
+RMSE normalized = 0
+note: Playwright visual assertion passed against committed Baseline; Actual equals Baseline for TASK-002 framework smoke.
