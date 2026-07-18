@@ -1,0 +1,16 @@
+
+> vite-react-typescript-starter@0.0.0 test:supabase E:\NextCloud\coding\desktop\collection\ui
+> supabase test db --workdir .. && node ./scripts/supabase-rls-api-test.mjs
+
+Connecting to local database...
+psql:/NextCloud/coding/desktop/collection/supabase/tests/database/user_bookmarks_rls_test.sql:4: NOTICE:  extension "pgtap" already exists, skipping
+/NextCloud/coding/desktop/collection/supabase/tests/database/user_bookmarks_rls_test.sql .. ok
+All tests successful.
+Files=1, Tests=13,  0 wallclock secs ( 0.02 usr  0.00 sys +  0.01 cusr  0.00 csys =  0.03 CPU)
+Result: PASS
+PASS REQ-025-AC-003 未认证 SELECT 空结果
+PASS REQ-025-AC-005 未认证写入拒绝 permission denied for table user_bookmarks
+PASS REQ-003-AC-002 本人 CRUD
+PASS REQ-003-AC-003 跨用户空结果
+
+All Supabase RLS API checks passed
