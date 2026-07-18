@@ -1,0 +1,17 @@
+{
+  "REQ-028-AC-001": {
+    "path": "new-bookmark",
+    "primaryActions": 3,
+    "limit": 3
+  },
+  "REQ-028-AC-002": {
+    "path": "spotlight-open",
+    "primaryActions": 2,
+    "limit": 3
+  },
+  "REQ-028-AC-003": {
+    "path": "organize-tag",
+    "primaryActions": 1,
+    "limit": 3
+  }
+}

@@ -1,0 +1,14 @@
+# Visual Diff Metric — TASK-025
+
+> 日期：2026-07-18
+
+| Screen | Comparator | Threshold | Result |
+|--------|------------|-----------|--------|
+| Main window | Playwright `toHaveScreenshot` | maxDiffPixelRatio 0.03 | PASS (no unapproved diff) |
+| Six views | Playwright `toHaveScreenshot` | maxDiffPixelRatio 0.03 | PASS (no unapproved diff) |
+| Settings | Playwright `toHaveScreenshot` | maxDiffPixelRatio 0.03 | PASS (no unapproved diff) |
+
+Snapshot sources:
+
+- `ui/tests/e2e/local-mvp/visual.spec.ts-snapshots/`
+- Evidence copies under `docs/spec/evidence/TASK-025-*-baseline.png`
