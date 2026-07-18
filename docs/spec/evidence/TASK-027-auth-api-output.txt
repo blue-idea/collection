@@ -1,0 +1,6 @@
+PASS REQ-001-AC-003 无效凭据被拒绝: Invalid login credentials
+PASS REQ-001-AC-001 有效登录返回 session
+PASS REQ-001-AC-004 getSession 恢复会话
+PASS REQ-002-AC-003 signOut 清除会话
+
+All Supabase Auth API checks passed
