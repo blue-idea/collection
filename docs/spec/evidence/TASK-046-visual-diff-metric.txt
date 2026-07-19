@@ -1,0 +1,20 @@
+# TASK-046 Visual Diff Metric
+
+Playwright threshold: `maxDiffPixelRatio <= 0.02` — PASS for all 12 snapshots.
+
+| Theme | Screen | FFmpeg PSNR Average | Diff image |
+|-------|--------|--------------------:|------------|
+| Daylight | Settings | 15.651601 dB | `TASK-046-daylight-settings-diff.png` |
+| Daylight | Main | 24.735899 dB | `TASK-046-daylight-main-diff.png` |
+| Paper | Settings | 29.258898 dB | `TASK-046-paper-settings-diff.png` |
+| Paper | Main | 24.323501 dB | `TASK-046-paper-main-diff.png` |
+| Midnight | Settings | 15.608062 dB | `TASK-046-midnight-settings-diff.png` |
+| Midnight | Main | 24.706769 dB | `TASK-046-midnight-main-diff.png` |
+| Ocean | Settings | 34.703851 dB | `TASK-046-ocean-settings-diff.png` |
+| Ocean | Main | 24.343939 dB | `TASK-046-ocean-main-diff.png` |
+| Graphite | Settings | 31.081825 dB | `TASK-046-graphite-settings-diff.png` |
+| Graphite | Main | 24.553076 dB | `TASK-046-graphite-main-diff.png` |
+| Sunset | Settings | 31.223173 dB | `TASK-046-sunset-settings-diff.png` |
+| Sunset | Main | 24.723648 dB | `TASK-046-sunset-main-diff.png` |
+
+说明：PSNR 用于归档 Baseline 与单独 Actual 截图之间的像素差异；最终验收以 Playwright `toHaveScreenshot` 的 2% 像素差异阈值为准。所有 Diff 均已保存，未发现未批准的重叠、裁切或不可读控件。
