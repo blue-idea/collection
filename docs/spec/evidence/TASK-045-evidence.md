@@ -29,6 +29,7 @@
 5. 批量移动选择其他分类并在成功后清空选择。
 6. 批量删除显示数量和二次确认，取消后保留选择。
 7. 点击 Done 退出选择模式、隐藏 checkbox 并清空选择。
+8. Card、List、Masonry、Timeline、Tag Aggregation、Theme Space 的书签项底部均显示 Edit、Move、Delete，并在选择模式显示 checkbox。
 
 ## 截图
 
