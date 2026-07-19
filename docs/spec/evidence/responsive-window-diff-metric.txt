@@ -1,0 +1,9 @@
+# Responsive Window Visual Diff
+
+- Viewport: `1920x1080`
+- Expected app shell: `1872x1032`（保留四周 24px 边距）
+- Playwright threshold: `maxDiffPixelRatio <= 0.02` — PASS
+- FFmpeg PSNR average: `46.477608 dB`
+- Baseline: `responsive-window-1920x1080-baseline.png`
+- Actual: `responsive-window-1920x1080-actual.png`
+- Diff: `responsive-window-1920x1080-diff.png`
