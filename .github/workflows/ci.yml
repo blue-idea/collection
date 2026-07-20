@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -78,5 +80,22 @@ jobs:
       - name: Playwright test list
         run: pnpm --dir ui exec playwright test --list
 
-      - name: Playwright smoke tests
-        run: pnpm --dir ui test:e2e
+      - name: Verify E2E impact selector
+        run: pnpm --dir ui test:e2e:impact:test
+
+      - name: Select affected E2E tests
+        if: github.event_name == 'pull_request'
+        id: e2e-impact
+        run: pnpm --dir ui test:e2e:impact -- --base "origin/${{ github.base_ref }}"
+
+      - name: Playwright affected E2E tests
+        if: github.event_name == 'pull_request'
+        run: pnpm --dir ui exec playwright test ${{ steps.e2e-impact.outputs.e2e }}
+
+      - name: Playwright affected visual tests
+        if: github.event_name == 'pull_request' && steps.e2e-impact.outputs.visual != ''
+        run: pnpm --dir ui exec playwright test ${{ steps.e2e-impact.outputs.visual }}
+
+      - name: Playwright full E2E and visual tests
+        if: github.event_name == 'push'
+        run: pnpm --dir ui exec playwright test tests/e2e tests/visual

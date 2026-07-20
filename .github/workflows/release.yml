@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 env:
   GO_VERSION: '1.26'
@@ -17,7 +18,49 @@ env:
   NFPM_VERSION: v2.47.0
 
 jobs:
+  verify-quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify successful main CI for release commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          conclusion="$(gh run list --repo "${{ github.repository }}" --workflow ci.yml --commit "${{ github.sha }}" --event push --json conclusion --jq '.[0].conclusion // "missing"')"
+          if [ "$conclusion" != "success" ]; then
+            echo "Release commit must have a successful main CI run; found: $conclusion" >&2
+            exit 1
+          fi
+
+  release-confidence:
+    needs: verify-quality-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: ui/pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        run: pnpm --dir ui install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm --dir ui exec playwright install --with-deps chromium
+
+      - name: Run release-critical journeys
+        run: pnpm --dir ui exec playwright test tests/e2e/smoke.spec.ts tests/e2e/local-mvp/core-paths.spec.ts tests/e2e/local-mvp/journeys.spec.ts
+
   release:
+    needs: release-confidence
     strategy:
       fail-fast: false
       matrix:
