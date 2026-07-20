@@ -83,6 +83,7 @@
 | TASK-055 | 开发/正式本机身份槽隔离 | REQ-025-AC-006 | done | `config/identity.go`、`config/identity_dev.go`、`config/app.go`、`config/storage.go`、`config/errors.go`、`scripts/dev.ps1`、`scripts/dev.sh`、`scripts/check-identity/main.go`、`.github/workflows/ci.yml`、`.github/workflows/release.yml` | `config/identity_test.go`、`config/identity_release_test.go`、`config/identity_dev_test.go` | `docs/spec/ac/TASK-055-AC.md` | 2026-07-20 |
 | TASK-056 | 全界面 UI 语言与设置对齐 | REQ-023-AC-004~006、008 | done | `ui/src/i18n/*`、`ui/src/App.tsx`、`ui/src/components/*`、`ui/src/features/*`、`ui/src/utils/format-date.ts` | `ui/src/i18n/*test*`、`ui/tests/e2e/settings-i18n.spec.ts`、`ui/tests/e2e/ui-language-alignment.spec.ts`、`ui/tests/visual/ui-language-alignment.spec.ts` | `docs/spec/ac/TASK-056-AC.md` | `docs/spec/evidence/TASK-056-evidence.md`、`TASK-056-*.png` |
 | TASK-057 | 变更影响 E2E 与发布门禁 | REQ-024-AC-006；REQ-028-AC-004 | done | `config/test/e2e-impact.mjs`、`ui/scripts/select-e2e-tests.mjs`、`.github/workflows/ci.yml`、`.github/workflows/release.yml` | `ui/scripts/select-e2e-tests.test.mjs` | `docs/spec/ac/TASK-057-AC.md` | `docs/spec/evidence/TASK-057-evidence.md` |
+| TASK-058 | 合并 Coverage 与精简 E2E | REQ-024-AC-006；REQ-028-AC-004 | done | `.github/workflows/ci.yml`、`config/test/e2e-impact.mjs`、`ui/scripts/select-e2e-tests.mjs`、`ui/verify-quality-config.mjs` | `ui/scripts/select-e2e-tests.test.mjs`、`pnpm --dir ui test:coverage` | `docs/spec/ac/TASK-058-AC.md` | `docs/spec/evidence/TASK-058-evidence.md` |
 
 ---
 
@@ -142,3 +143,4 @@
 | 2026-07-20 | 新增 TASK-056 与 REQ-023-AC-008 追溯 | 全部非自定义 UI 文案、状态和无障碍名称跟随设置语言；自定义内容保持原样 |
 | 2026-07-20 | TASK-056 更新为 done | 全界面语言对齐 Unit/E2E/Visual 验收通过，补齐 AC、evidence 与报告 |
 | 2026-07-21 | 新增并完成 TASK-057 | PR 按变更影响执行 Smoke 与相关测试；main 全量回归；Release 校验同 SHA CI 后执行关键旅程与构建 |
+| 2026-07-21 | 新增并完成 TASK-058 | Vitest/Coverage 合并为单次执行；文档和纯 Go 变更跳过浏览器；定时/手动保留全量回归 |

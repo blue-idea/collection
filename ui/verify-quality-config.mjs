@@ -58,6 +58,27 @@ async function verifyWorkflows() {
   assert.match(ciWorkflow, /pnpm --dir ui audit --audit-level high/, 'CI must scan Node dependencies');
   assert.match(ciWorkflow, /go vet \.\/\.\.\./, 'CI must run go vet');
   assert.match(ciWorkflow, /go test \.\/\.\.\./, 'CI must run Go tests');
+  assert.doesNotMatch(
+    ciWorkflow,
+    /pnpm --dir ui test --run/,
+    'CI must not execute the Vitest suite before coverage',
+  );
+  assert.equal(
+    (ciWorkflow.match(/pnpm --dir ui test:coverage/g) ?? []).length,
+    1,
+    'CI must execute the Vitest suite with coverage exactly once',
+  );
+  assert.match(
+    ciWorkflow,
+    /github\.event_name == 'pull_request' \|\| github\.event_name == 'push'/,
+    'PR and main push must both use changed-file E2E selection',
+  );
+  assert.match(
+    ciWorkflow,
+    /steps\.e2e-impact\.outputs\.required == 'true'/,
+    'Playwright setup must be skipped when no browser tests are required',
+  );
+  assert.match(ciWorkflow, /schedule:/, 'CI must retain a scheduled full browser regression');
   assert.match(desktopBuildWorkflow, /windows-latest/, 'CI must build on Windows');
   assert.match(desktopBuildWorkflow, /macos-latest/, 'CI must build on macOS');
   assert.match(

@@ -19,8 +19,7 @@ const matchesPattern = (file, pattern) => {
 
 const matchesAny = (file, patterns) => patterns.some((pattern) => matchesPattern(file, pattern));
 
-const isProductionCode = (file) =>
-  /^(ui\/src\/|internal\/|config\/|supabase\/migrations\/|.*\.go$)/.test(file);
+const isBrowserProductionCode = (file) => file.startsWith('ui/src/');
 
 export const selectE2ETests = (changedFiles, config = e2eImpactConfig) => {
   const files = changedFiles.map(normalizePath).filter(Boolean);
@@ -28,6 +27,7 @@ export const selectE2ETests = (changedFiles, config = e2eImpactConfig) => {
 
   if (fullSuiteReasons.length > 0) {
     return {
+      required: true,
       fullSuite: true,
       e2e: config.fullSuite.e2e,
       visual: config.fullSuite.visual,
@@ -35,7 +35,7 @@ export const selectE2ETests = (changedFiles, config = e2eImpactConfig) => {
     };
   }
 
-  const e2e = new Set(config.always);
+  const e2e = new Set();
   const visual = new Set();
   const matchedFiles = new Set();
 
@@ -58,10 +58,11 @@ export const selectE2ETests = (changedFiles, config = e2eImpactConfig) => {
   }
 
   const hasUnmappedProductionCode = files.some(
-    (file) => isProductionCode(file) && !matchedFiles.has(file),
+    (file) => isBrowserProductionCode(file) && !matchedFiles.has(file),
   );
   if (hasUnmappedProductionCode) {
     return {
+      required: true,
       fullSuite: true,
       e2e: config.fullSuite.e2e,
       visual: config.fullSuite.visual,
@@ -69,13 +70,19 @@ export const selectE2ETests = (changedFiles, config = e2eImpactConfig) => {
     };
   }
 
+  const selectedE2E = e2e.size > 0
+    ? [
+        ...config.always,
+        ...[...e2e].filter((testFile) => !config.always.includes(testFile)).sort(),
+      ]
+    : [];
+  const selectedVisual = [...visual].sort();
+
   return {
+    required: selectedE2E.length > 0 || selectedVisual.length > 0,
     fullSuite: false,
-    e2e: [
-      ...config.always,
-      ...[...e2e].filter((testFile) => !config.always.includes(testFile)).sort(),
-    ],
-    visual: [...visual].sort(),
+    e2e: selectedE2E,
+    visual: selectedVisual,
     reasons: [],
   };
 };
@@ -96,6 +103,7 @@ const writeGitHubOutput = (selection) => {
     process.env.GITHUB_OUTPUT,
     [
       `full_suite=${selection.fullSuite}`,
+      `required=${selection.required}`,
       `e2e=${selection.e2e.join(' ')}`,
       `visual=${selection.visual.join(' ')}`,
       `reasons=${selection.reasons.join(',')}`,

@@ -30,11 +30,20 @@ test('共享 Store 变更应升级为全量 E2E 与视觉回归', () => {
   assert.deepEqual(result.visual, ['tests/visual']);
 });
 
-test('仅文档变更应只保留固定冒烟测试', () => {
+test('仅文档变更应跳过全部浏览器测试', () => {
   const result = selectE2ETests(['docs/spec/test_strategy.md']);
 
   assert.equal(result.fullSuite, false);
-  assert.deepEqual(result.e2e, ['tests/e2e/smoke.spec.ts']);
+  assert.equal(result.required, false);
+  assert.deepEqual(result.e2e, []);
+  assert.deepEqual(result.visual, []);
+});
+
+test('纯 Go 内部实现变更应由 Go 测试覆盖并跳过浏览器测试', () => {
+  const result = selectE2ETests(['internal/localstore/atomic.go']);
+
+  assert.equal(result.required, false);
+  assert.deepEqual(result.e2e, []);
   assert.deepEqual(result.visual, []);
 });
 
@@ -63,4 +72,10 @@ test('无法映射的生产代码变更应安全升级为全量测试', () => {
 
   assert.equal(result.fullSuite, true);
   assert.deepEqual(result.reasons, ['unmapped-production-code']);
+});
+
+test('命中 UI 影响域时应声明需要浏览器测试', () => {
+  const result = selectE2ETests(['ui/src/features/tags/apply-tag-command.ts']);
+
+  assert.equal(result.required, true);
 });

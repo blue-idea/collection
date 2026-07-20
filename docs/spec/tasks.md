@@ -1318,6 +1318,32 @@ AC 范围记法如 `REQ-003-AC-001~005` 表示从 001 到 005 的全部 AC，首
 
 ---
 
+- [x] **TASK-058 · 合并 Coverage 并减少非必要 E2E**
+
+  > 依赖：TASK-057 · 预计：2–3 小时 · 状态：done · 2026-07-21
+
+  - [x] Red：增加质量配置断言，禁止同一 CI 重复执行普通 Vitest 与 Coverage；增加文档、纯 Go 和浏览器门禁测试。
+  - [x] Green：以单次 `test:coverage` 承担 300 项测试及覆盖率报告；PR/main 统一按变更影响选择浏览器测试。
+  - [x] Refactor：删除重复影响域；无浏览器影响时跳过 Playwright 安装与执行；定时和手动工作流保留全量 E2E/视觉。
+
+  **验证方式：**
+  ```powershell
+  pnpm --dir ui verify:quality-config
+  pnpm --dir ui test:e2e:impact:test
+  pnpm --dir ui test:coverage
+  pnpm --dir ui lint
+  pnpm --dir ui typecheck
+  pnpm --dir ui build
+  ```
+
+  **验收证据：** Coverage 单次执行结果、9 项影响选择测试、质量配置契约与远程 CI 日志。
+
+  _需求: REQ-024、REQ-028
+  验收标准：REQ-024-AC-006、REQ-028-AC-004
+  _测试类型: Unit + E2E
+
+---
+
 ## 进度汇总
 
 | TASK ID | 名称 | 测试类型 | 状态 | 关联需求 |
@@ -1379,6 +1405,7 @@ AC 范围记法如 `REQ-003-AC-001~005` 表示从 001 到 005 的全部 AC，首
 | TASK-055 | 开发/正式本机身份槽隔离 | Unit | done | REQ-025 |
 | TASK-056 | 全界面 UI 语言与设置对齐 | Unit/E2E | done | REQ-023 |
 | TASK-057 | 变更影响 E2E 与发布门禁 | Unit/E2E | done | REQ-024、028 |
+| TASK-058 | 合并 Coverage 与精简 E2E | Unit/E2E | done | REQ-024、028 |
 
 ---
 
@@ -1402,3 +1429,4 @@ AC 范围记法如 `REQ-003-AC-001~005` 表示从 001 到 005 的全部 AC，首
 | 2.2.0 | 2026-07-20 | 已定稿 | 新增 TASK-055，开发/正式本机身份槽隔离（REQ-025-AC-006） |
 | 2.3.0 | 2026-07-20 | 已定稿 | 新增 TASK-056，全界面非自定义 UI 文案与无障碍名称跟随设置语言 |
 | 2.4.0 | 2026-07-21 | 已定稿 | 新增 TASK-057，PR 按变更影响执行测试，main 全量回归，Release 校验同 SHA 质量门禁 |
+| 2.5.0 | 2026-07-21 | 已定稿 | 新增 TASK-058，合并 Vitest/Coverage 重复执行，PR/main 精简非必要浏览器测试，定时保留全量回归 |
