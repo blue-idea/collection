@@ -21,4 +21,13 @@ pnpm --dir ui exec playwright test tests/e2e/smoke.spec.ts
 
 ## 远程门禁
 
-GitHub Actions 的 PR、main push 和 Release 运行需要提交后由远程 runner 验证；当前不伪造远程 PASS。
+- PR：https://github.com/blue-idea/collection/pull/5
+- CI Run：https://github.com/blue-idea/collection/actions/runs/29780522532
+- Desktop Build Run：https://github.com/blue-idea/collection/actions/runs/29780522518
+- 影响选择：`fullSuite: true`，原因包含两个工作流、集中影响配置与 `ui/package.json`。
+- E2E：88 PASS、6 SKIPPED，耗时约 9.9 分钟。
+- Visual：5 PASS，耗时约 1.2 分钟。
+- Windows 构建：PASS。
+- macOS 构建：PASS。
+
+云认证 6 项用例因 CI 环境未配置相应凭据而 SKIPPED，未计入 PASS。main push 与 Release 门禁需要合并及发版时分别产生真实运行结果。
