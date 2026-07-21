@@ -57,6 +57,7 @@ import {
   moveCategoryUnder,
   runCreateCategory,
   runDeleteCategory,
+  runRenameCategory,
   runSetCategoryIcon,
   SetCategoryIconDialog,
   shouldConfirmCategoryDelete,
@@ -209,6 +210,7 @@ export default function App() {
   const [bulkDeleteIds, setBulkDeleteIds] = useState<string[]>([]);
   const [categoryFormOpen, setCategoryFormOpen] = useState(false);
   const [categoryFormParentId, setCategoryFormParentId] = useState<string | null>(null);
+  const [categoryRenameId, setCategoryRenameId] = useState<string | null>(null);
   const [categoryDeleteId, setCategoryDeleteId] = useState<string | null>(null);
   const [categoryRecursiveConfirm, setCategoryRecursiveConfirm] = useState(false);
   const [categoryIconId, setCategoryIconId] = useState<string | null>(null);
@@ -743,6 +745,27 @@ export default function App() {
     flashToast(i18n.t('toast.categoryCreated'));
   }, [bookmarks, cats, cols, flashToast, i18n, categoryFormParentId, tagList]);
 
+  const handleRenameCategory = useCallback((id: string, name: string) => {
+    const result = runRenameCategory({
+      bookmarks,
+      categories: cats,
+      collections: cols,
+      tags: tagList,
+      id,
+      name,
+    });
+    if (!result.ok) {
+      flashToast(localizeCommandError(i18n, result.error));
+      return;
+    }
+    const applied = applyCategoryLibraryResult(result.value, bookmarks, cats);
+    setCats(applied.categories);
+    setBookmarks(applied.bookmarks);
+    setCategoryFormOpen(false);
+    setCategoryRenameId(null);
+    flashToast(i18n.t('toast.categoryRenamed'));
+  }, [bookmarks, cats, cols, flashToast, i18n, tagList]);
+
   const handleSaveCollection = useCallback((values: CollectionFormValues) => {
     // REQ-012-AC-001：创建或编辑主题后刷新侧栏并持久化。
     if (!collectionForm) return;
@@ -1124,6 +1147,7 @@ export default function App() {
         break;
       case 'category-form':
         setCategoryFormOpen(false);
+        setCategoryRenameId(null);
         break;
       case 'category-icon':
         setCategoryIconId(null);
@@ -1345,6 +1369,10 @@ export default function App() {
             }}
             onNewCategory={(parentId) => {
               setCategoryFormParentId(parentId ?? (state.selection.kind === 'category' ? state.selection.id : null));
+              setCategoryFormOpen(true);
+            }}
+            onRenameCategory={(id) => {
+              setCategoryRenameId(id);
               setCategoryFormOpen(true);
             }}
             onDeleteCategory={requestDeleteCategory}
@@ -1649,9 +1677,19 @@ export default function App() {
       )}
       {categoryFormOpen && (
         <CategoryFormDialog
-          mode="create"
-          onCancel={() => setCategoryFormOpen(false)}
-          onSubmit={handleCreateCategory}
+          mode={categoryRenameId ? 'rename' : 'create'}
+          initialName={categoryRenameId ? (cats.find((c) => c.id === categoryRenameId)?.name ?? '') : ''}
+          onCancel={() => {
+            setCategoryFormOpen(false);
+            setCategoryRenameId(null);
+          }}
+          onSubmit={(name) => {
+            if (categoryRenameId) {
+              handleRenameCategory(categoryRenameId, name);
+            } else {
+              handleCreateCategory(name);
+            }
+          }}
         />
       )}
       {categoryDeleteId && (

@@ -67,7 +67,7 @@ function NavRow({
       }}
       className={`group flex items-center gap-2 pr-2 rounded-lg mx-1.5 transition-all cursor-pointer no-select ${
         active ? 'bg-accent-500/20 text-ink-100 shadow-[inset_0_0_0_1px_rgba(45,127,249,0.3)]' : 'text-ink-200 hover:bg-ink-700/50'
-      } ${dragOver ? 'drop-target' : ''} ${className}`}
+      } ${dragOver ? 'drop-target' : ''} ${className} relative`}
       data-category-drop={label}
       style={{ paddingLeft: 12 + depth * 16 }}
     >
@@ -116,6 +116,7 @@ export function Sidebar({
   onOpenInsights,
   onNewBookmark,
   onNewCategory,
+  onRenameCategory,
   onDeleteCategory,
   onMoveCategory,
   onRequestSetCategoryIcon,
@@ -138,6 +139,7 @@ export function Sidebar({
   onOpenInsights: () => void;
   onNewBookmark: () => void;
   onNewCategory: (parentId?: string) => void;
+  onRenameCategory: (categoryId: string) => void;
   onDeleteCategory: (categoryId: string) => void;
   onMoveCategory: (categoryId: string, newParentId: string) => void;
   onRequestSetCategoryIcon: (categoryId: string) => void;
@@ -194,7 +196,7 @@ export function Sidebar({
                   onDragOver={(e) => { e.preventDefault(); setDragOverId(cat.id); }}
                   onDragLeave={() => setDragOverId(null)}
                   trailing={
-                    <span className="flex items-center gap-0.5">
+                    <span className="hidden group-hover:flex items-center gap-0.5 absolute right-2 bg-ink-900/90 backdrop-blur-sm pl-1.5 pr-0.5 py-0.5 rounded-md border border-white/5 shadow-md">
                       <button
                         type="button"
                         aria-label={i18n.t('sidebar.newSubCategory')}
@@ -207,6 +209,19 @@ export function Sidebar({
                         className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 w-5 h-5 rounded text-ink-400 hover:text-accent-300 flex items-center justify-center transition"
                       >
                         <Icon name="Plus" size={11} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={i18n.t('sidebar.renameCategory')}
+                        title={i18n.t('sidebar.renameCategory')}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRenameCategory(cat.id);
+                        }}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 w-5 h-5 rounded text-ink-400 hover:text-accent-300 flex items-center justify-center transition"
+                      >
+                        <Icon name="PenTool" size={11} />
                       </button>
                       <button
                         type="button"
@@ -401,30 +416,32 @@ export function Sidebar({
                 trailing={
                   <span className="flex items-center gap-0.5">
                     <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-70`} />
-                    <button
-                      type="button"
-                      aria-label={i18n.t('sidebar.editCollection')}
-                      title={i18n.t('sidebar.editCollection')}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEditCollection(col.id);
-                      }}
-                      className="opacity-0 group-hover:opacity-100 w-5 h-5 rounded text-ink-400 hover:text-ink-100 flex items-center justify-center transition"
-                    >
-                      <Icon name="PenTool" size={11} />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label={i18n.t('sidebar.deleteCollection')}
-                      title={i18n.t('sidebar.deleteCollection')}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDeleteCollection(col.id);
-                      }}
-                      className="opacity-0 group-hover:opacity-100 w-5 h-5 rounded text-ink-400 hover:text-coral-400 flex items-center justify-center transition"
-                    >
-                      <Icon name="Trash2" size={11} />
-                    </button>
+                    <span className="hidden group-hover:flex items-center gap-0.5 absolute right-2 bg-ink-900/90 backdrop-blur-sm pl-1.5 pr-0.5 py-0.5 rounded-md border border-white/5 shadow-md">
+                      <button
+                        type="button"
+                        aria-label={i18n.t('sidebar.editCollection')}
+                        title={i18n.t('sidebar.editCollection')}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditCollection(col.id);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 w-5 h-5 rounded text-ink-400 hover:text-ink-100 flex items-center justify-center transition"
+                      >
+                        <Icon name="PenTool" size={11} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={i18n.t('sidebar.deleteCollection')}
+                        title={i18n.t('sidebar.deleteCollection')}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteCollection(col.id);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 w-5 h-5 rounded text-ink-400 hover:text-coral-400 flex items-center justify-center transition"
+                      >
+                        <Icon name="Trash2" size={11} />
+                      </button>
+                    </span>
                   </span>
                 }
               />
