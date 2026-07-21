@@ -1,0 +1,3 @@
+ok  	github.com/blue-idea/collection/internal/hotkey	0.074s
+ok  	github.com/blue-idea/collection/internal/tray	0.071s
+ok  	github.com/blue-idea/collection/internal/platform	0.105s
