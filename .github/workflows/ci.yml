@@ -47,7 +47,7 @@ jobs:
       - name: Install Linux build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libx11-dev
+          sudo apt-get install -y libx11-dev xvfb
 
       - name: Install frontend dependencies
         run: pnpm --dir ui install --frozen-lockfile
@@ -71,7 +71,7 @@ jobs:
         run: go vet ./...
 
       - name: Go tests
-        run: go test ./...
+        run: xvfb-run -a go test ./...
 
       - name: Go tests (dev identity)
         run: go test -tags=dev ./config
