@@ -44,9 +44,9 @@ Start-Process build/bin/linkit.exe
 
 > 注：`-s` 跳过前端时若未同步 `frontend/dist`，会报 `no index.html`；完整 `wails build` 正常。
 
-## Manual J-17（待确认）
+## Manual J-17
 
-请在本机对 `build/bin/linkit.exe`（或 `./scripts/dev.ps1`）确认：
+用户于 2026-07-21 通过 `./scripts/dev.ps1` 确认：
 
 1. 点击窗口关闭 → 隐藏到托盘，进程不退出  
 2. 托盘菜单 Show / Quit  
