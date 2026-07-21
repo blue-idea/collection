@@ -58,6 +58,17 @@ async function verifyWorkflows() {
   assert.match(ciWorkflow, /pnpm --dir ui audit --audit-level high/, 'CI must scan Node dependencies');
   assert.match(ciWorkflow, /go vet \.\/\.\.\./, 'CI must run go vet');
   assert.match(ciWorkflow, /go test \.\/\.\.\./, 'CI must run Go tests');
+  const linuxDependenciesIndex = ciWorkflow.indexOf('sudo apt-get install -y libx11-dev');
+  const goVetIndex = ciWorkflow.indexOf('go vet ./...');
+  assert.notEqual(
+    linuxDependenciesIndex,
+    -1,
+    'CI must install libx11-dev for the Linux hotkey backend',
+  );
+  assert.ok(
+    linuxDependenciesIndex < goVetIndex,
+    'CI must install Linux build dependencies before go vet',
+  );
   assert.doesNotMatch(
     ciWorkflow,
     /pnpm --dir ui test --run/,
