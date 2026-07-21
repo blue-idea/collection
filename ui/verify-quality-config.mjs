@@ -95,6 +95,13 @@ async function verifyWorkflows() {
     /steps\.e2e-impact\.outputs\.required == 'true'/,
     'Playwright setup must be skipped when no browser tests are required',
   );
+  assert.match(
+    ciWorkflow,
+    /actions\/upload-artifact@v4/,
+    'CI must upload Playwright failure artifacts',
+  );
+  assert.match(ciWorkflow, /ui\/test-results/, 'CI must retain Playwright test results');
+  assert.match(ciWorkflow, /ui\/playwright-report/, 'CI must retain the Playwright HTML report');
   assert.match(ciWorkflow, /schedule:/, 'CI must retain a scheduled full browser regression');
   assert.match(desktopBuildWorkflow, /windows-latest/, 'CI must build on Windows');
   assert.match(desktopBuildWorkflow, /macos-latest/, 'CI must build on macOS');

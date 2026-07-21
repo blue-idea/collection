@@ -13,6 +13,16 @@ async function enterLocalMode(page: import('@playwright/test').Page) {
   await expect(page.getByText('Lattice', { exact: true })).toBeVisible();
 }
 
+async function clickFirstCategoryAction(
+  page: import('@playwright/test').Page,
+  actionName: 'New subcategory' | 'Delete category'
+) {
+  const actionButton = page.getByRole('button', { name: actionName, includeHidden: true }).first();
+  const categoryRow = actionButton.locator('xpath=ancestor::*[@data-category-drop][1]');
+  await categoryRow.hover();
+  await actionButton.click();
+}
+
 test.describe('分类 CRUD', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
@@ -39,7 +49,7 @@ test.describe('分类 CRUD', () => {
 
   test('在已有分类下创建子分类 shall 成功并展示在层级中', async ({ page }) => {
     // 鼠标移动到并点击第一个分类的“新建子分类”按钮
-    await page.getByRole('button', { name: 'New subcategory' }).first().click();
+    await clickFirstCategoryAction(page, 'New subcategory');
     await expect(page.getByRole('dialog', { name: 'New category' })).toBeVisible();
     await page.getByLabel('Category name').fill('SubCategory Test');
     await page.getByRole('button', { name: 'Create category' }).click();
@@ -55,7 +65,7 @@ test.describe('分类 CRUD', () => {
   // REQ-010-AC-003
   test('分类删除 shall 显示移动、递归与取消三种选择', async ({ page }) => {
     // 选中一个已知有内容的分类入口后打开删除
-    await page.getByRole('button', { name: 'Delete category' }).first().click();
+    await clickFirstCategoryAction(page, 'Delete category');
     await expect(page.getByRole('dialog', { name: 'Delete this category?' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Move contents then delete' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Delete recursively' })).toBeVisible();
@@ -65,7 +75,7 @@ test.describe('分类 CRUD', () => {
     await expect(page.getByRole('dialog', { name: 'Delete this category?' })).toHaveCount(0);
 
     await mkdir(evidenceDirectory, { recursive: true });
-    await page.getByRole('button', { name: 'Delete category' }).first().click();
+    await clickFirstCategoryAction(page, 'Delete category');
     await page.screenshot({
       path: resolve(evidenceDirectory, 'TASK-014-category-delete.png'),
       fullPage: true,
