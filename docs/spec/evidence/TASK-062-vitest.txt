@@ -1,0 +1,12 @@
+﻿
+ RUN  v3.2.7 E:/NextCloud/coding/desktop/collection/ui
+
+ 鉁?src/config/window-size.test.ts (2 tests) 3ms
+ 鉁?src/domain/library.test.ts (16 tests) 124ms
+ 鉁?src/services/settings/settings.test.ts (6 tests) 7ms
+
+ Test Files  3 passed (3)
+      Tests  24 passed (24)
+   Start at  18:26:51
+   Duration  1.70s (transform 95ms, setup 262ms, collect 197ms, tests 134ms, environment 1.33s, prepare 242ms)
+

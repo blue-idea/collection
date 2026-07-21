@@ -1,0 +1,3 @@
+﻿ok  	github.com/blue-idea/collection/config	0.034s
+ok  	github.com/blue-idea/collection/internal/platform	0.074s
+ok  	github.com/blue-idea/collection/internal/settingsstore	0.143s
