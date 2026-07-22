@@ -1,0 +1,6 @@
+pixelDiffCount=10
+pixelDiffRatio=0.0000624376
+thresholdRatio=0.08
+result=PASS
+
+Generated with ImageMagick `compare -metric AE` from the Playwright baseline and actual dialog screenshots.
