@@ -7,7 +7,8 @@
 ```powershell
 go test ./internal/metadata/... ./config/... -count=1
 pnpm --dir ui typecheck
-pnpm --dir ui exec vitest run src/features/bookmarks src/domain/library.test.ts src/domain/commands/bookmarks.test.ts src/features/import-export/apply.test.ts src/features/ai/bookmark-analysis/bookmark-analysis.test.ts src/components/ui.test.tsx
+pnpm --dir ui exec vitest run
+pnpm --dir ui test:e2e
 supabase db push --linked --yes
 ```
 
@@ -17,8 +18,9 @@ supabase db push --linked --yes
 |--------|------|
 | Go `internal/metadata` + `config` | PASS |
 | `pnpm typecheck` | PASS |
-| Vitest（bookmarks + library + ui 相关） | 73 tests PASS（含 `metadata-client.test.ts`） |
-| 远程 Supabase migration 对齐 | `supabase db push --linked --yes` → Remote database is up to date |
+| Vitest 全量 `pnpm exec vitest run` | **347** tests PASS（92 files） |
+| E2E `pnpm test:e2e` | **93** passed，**6** skipped（云 auth，未配置 Supabase 环境） |
+| 远程 push | `main` → `origin/main`（`32f241d`） |
 
 ## 产品行为（用户确认）
 
