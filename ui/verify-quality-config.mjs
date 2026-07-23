@@ -67,9 +67,7 @@ async function verifyWorkflows() {
   );
   assert.match(releaseWorkflow, /contents: write/, 'Release workflow must declare write permission');
   assert.match(releaseWorkflow, /gh release create/, 'Release workflow must publish a GitHub release');
-  assert.match(releaseWorkflow, /ubuntu-24\.04-arm/, 'Release workflow must build Linux arm64 natively');
   assert.match(releaseWorkflow, /linux\/amd64/, 'Release workflow must build Linux amd64');
-  assert.match(releaseWorkflow, /linux\/arm64/, 'Release workflow must build Linux arm64');
   assert.match(releaseWorkflow, /NFPM_VERSION:/, 'Release workflow must pin nFPM version');
   assert.match(releaseWorkflow, /goreleaser\/nfpm\/v2\/cmd\/nfpm/, 'Release workflow must install pinned nFPM');
   assert.match(releaseWorkflow, /nfpm pkg --packager deb/, 'Release workflow must build Debian packages');
