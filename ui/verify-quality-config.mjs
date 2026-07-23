@@ -58,6 +58,7 @@ async function verifyWorkflows() {
   assert.match(ciWorkflow, /pnpm --dir ui audit --audit-level high/, 'CI must scan Node dependencies');
   assert.match(ciWorkflow, /go vet \.\/\.\.\./, 'CI must run go vet');
   assert.match(ciWorkflow, /go test \.\/\.\.\./, 'CI must run Go tests');
+  assert.match(desktopBuildWorkflow, /ubuntu-24\.04/, 'CI must build on Linux');
   assert.match(desktopBuildWorkflow, /windows-latest/, 'CI must build on Windows');
   assert.match(desktopBuildWorkflow, /macos-latest/, 'CI must build on macOS');
   assert.match(
